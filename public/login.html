@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Login</title>
+<style>
+    /* สไตล์ CSS สำหรับหน้าจอลงทะเบียน */
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>User Login</h2>
+    <form id="LoginForm" >
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      
+      <div class="form-group">
+        <button type="submit">Login</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // JavaScript เพื่อเชื่อมต่อกับ backend และส่งข้อมูลไปยังเซิร์ฟเวอร์
+    document.getElementById('LoginForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      
+      const formData = new FormData(this);
+      const requestData = {};
+      for (const [key, value] of formData.entries()) {
+        requestData[key] = value;
+      }
+      console.log(requestData);
+      try {
+        const response = await fetch('/login', {
+        //const response = await fetch('/login', {
+          
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to Login1');
+        }
+
+        const responseData = await response.json();
+        alert(responseData.message);
+        window.location.assign('home.html');
+      } catch (error) {
+        console.error(error);
+        alert('Failed to Login2');
+      }
+    });
+  </script>
+</body>
+</html>

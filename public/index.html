@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Registration</title>
+<style>
+  /* สไตล์ CSS สำหรับหน้าจอลงทะเบียน */
+  /* คุณสามารถปรับแต่งตามต้องการได้ */
+  /* สไตล์ CSS สำหรับหน้าจอลงทะเบียน */
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>User Registration</h2>
+    <form id="registerForm" action="login.html">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="sex">Sex:</label>
+        <input type="text" id="sex" name="sex">
+      </div>
+      <div class="form-group">
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address">
+      </div>
+      <div class="form-group">
+        <label for="tel">Telephone:</label>
+        <input type="text" id="tel" name="tel">
+      </div>
+      <div class="form-group">
+        <button type="submit">Register</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // JavaScript เพื่อเชื่อมต่อกับ backend และส่งข้อมูลไปยังเซิร์ฟเวอร์
+    document.getElementById('registerForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      
+      const formData = new FormData(this);
+      const requestData = {};
+      for (const [key, value] of formData.entries()) {
+        requestData[key] = value;
+      }
+
+      const password = requestData['password'];
+      if (!(/[0-9]/.test(password) && /[a-zA-Z]/.test(password))) {
+        alert('Password must contain at least one letter and one number');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:3000/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to register1');
+        }
+
+        // รับข้อมูลที่ได้จากการลงทะเบียน
+        const responseData = await response.json();
+        alert(responseData.message);
+        
+        // ลงทะเบียนสำเร็จ นำผู้ใช้ไปยังหน้า login.html
+        window.location.assign('login.html');
+      } catch (error) {
+        console.error(error);
+        alert('Failed to register2');
+      }
+    });
+  </script>
+</body>
+</html>
